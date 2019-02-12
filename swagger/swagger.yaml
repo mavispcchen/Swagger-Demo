@@ -1,0 +1,143 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Swagger Demo App
+# during dev, should point to your local machine
+host: comp2912-demo.herokuapp.com
+# basePath prefixes all resource paths
+basePath: /
+
+schemes:
+  # tip: remove http to make production-grade
+  # - http
+  - https
+paths:
+  /api/users:
+    get:
+      summary: Returns all the users' data in DB
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/User"
+        "500":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/user/{userId}:
+    get:
+      summary: Returns a user based on userId
+      parameters:
+        - name: userId
+          in: path
+          description: The userId of the user
+          required: true
+          type: number
+          default: 1
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/User"
+        "500":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    delete:
+      summary: Delete a user based on userId
+      parameters:
+        - name: userId
+          in: path
+          description: The userId of the user
+          required: true
+          type: number
+          default: 1
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        "500":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/user:
+    post:
+      summary: Create a user based on JSON data
+      parameters:
+        - in: body
+          name: user
+          description: The user to create.
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        "500":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/user/{userId}/name/{name}:
+    put:
+      summary: Update a user's name based on userId
+      parameters:
+        - name: userId
+          in: path
+          description: The userId of the user
+          required: true
+          type: number
+          default: 1
+        - name: name
+          in: path
+          description: The new name of the user
+          required: true
+          type: string
+          default: "Mavi"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        "500":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+# complex objects have schema definitions
+definitions:
+  SuccessResponse:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  User:
+    type: object
+    required:
+      - userId
+      - name
+    properties:
+      userId:
+        type: number
+        example: 1
+      name:
+        type: string
+        example: Mavis
+      gender:
+        type: string
+        example: Female
